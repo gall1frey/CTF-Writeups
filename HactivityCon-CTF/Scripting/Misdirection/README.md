@@ -26,7 +26,7 @@ wget http://jh2i.com:50011/site/flag.php --max-redirect 120
 ```
 That landed me with this
 
-```
+```html
     <h1 class="card-title">Whoops, sorry!</b></h1>
 
     <hr>
@@ -43,7 +43,7 @@ It probably is on one of the intermediate pages.
 Navigating to ```http://jh2i.com:50011/site/```, we get a list of all the pages. 
 We save names of these pages in a text file, then write a python script to get data from each of the pages
 
-```
+```python
 import requests
 
 ###DATA
