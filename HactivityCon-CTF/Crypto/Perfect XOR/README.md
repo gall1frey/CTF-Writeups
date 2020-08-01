@@ -85,5 +85,5 @@ On running this script, the flag prints out on the terminal quickly
 ```
 $ python script.py
 ...
-flag{tHE_br...
+flag{tHE_br0kEN_Xor}
 ```
