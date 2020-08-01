@@ -111,6 +111,7 @@ for l in alfa_num:
 The script took some time to run, but I finally got a partial flag
 
 ```
+?flag??artial?password?pu??le?pieces????
 
 ```
 
