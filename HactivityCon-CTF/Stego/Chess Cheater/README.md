@@ -1,5 +1,4 @@
-# Impartial
-
+# Chess Cheater
 Author: [Gallifrey](https://github.com/gall1grey)
 
 # Requirements
