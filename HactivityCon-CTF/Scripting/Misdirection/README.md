@@ -21,7 +21,7 @@ and sticks you in a series of redirections and ends up nowhere.
 
 I figured I can wget the final web page by increasing the limit on redirections in wget.
 
-'```
+```
 wget http://jh2i.com:50011/site/flag.php --max-redirect 120
 ```
 That landed me with this
