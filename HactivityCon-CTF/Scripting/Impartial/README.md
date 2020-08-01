@@ -2,9 +2,6 @@
 
 Author: [Gallifrey](https://github.com/gallifrey)
 
-# Requirements
-
-- Python
 
 # Challenge
 
