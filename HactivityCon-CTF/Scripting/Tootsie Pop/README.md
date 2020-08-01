@@ -32,7 +32,7 @@ Working off of this, the logic of the script should be something like:
 
 Writing a python script for it:
 
-```
+```python
 import subprocess
 from os import listdir
 from os.path import isfile, join
