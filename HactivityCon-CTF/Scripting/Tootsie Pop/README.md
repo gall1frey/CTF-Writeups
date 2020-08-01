@@ -102,5 +102,5 @@ print(f.read())
 The final text document contains the flag
 
 ```
-flag{the_an...
+flag{the_answer_is_1548_licks}
 ```
