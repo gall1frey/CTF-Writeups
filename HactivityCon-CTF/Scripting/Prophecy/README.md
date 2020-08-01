@@ -99,7 +99,7 @@ def netcat(hn,p,content):
 content = "1234"
 
 netcat(hostname, port,content.encode())
-'''
+```
 
 This script isn't a very good way to go about it, but it gets the job done
 
@@ -107,5 +107,4 @@ On running the script, we get the flag:
 
 ```
 flag{does_this_count_as_artificial_intelligence}
-```
 ```
