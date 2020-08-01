@@ -68,4 +68,5 @@ for i in range(len(flag)):
 
 And the flag is
 ```
-flag{http_30...
+flag{http_302_point_you_in_the_right_redirection}
+```
