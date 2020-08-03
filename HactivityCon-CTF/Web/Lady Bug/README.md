@@ -1,4 +1,4 @@
-# Spy Vs Spy
+# Lady Bug
 Author: [gallifrey](https://github.com/gall1frey)
 
 # Challenge
