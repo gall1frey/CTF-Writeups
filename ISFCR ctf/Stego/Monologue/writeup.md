@@ -1,5 +1,5 @@
 # Monologue
-Author: [Gallifrey](https://github.com/gall1grey)
+Author: [Gallifrey](https://github.com/gall1frey)
 
 
 # Challenge
@@ -18,7 +18,7 @@ I extracted them with a script and fond the flag
 
 Here's the script:
 
-```
+```python
 f = open('monologue.txt','r')
 
 l = f.read()
