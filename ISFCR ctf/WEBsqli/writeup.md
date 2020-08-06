@@ -24,4 +24,4 @@ NewLogin 2
 
 Had to login as all users.
 
-#other challenges were mySQL injection, that were done useing sqlmap.
+## other challenges were mySQL injection, that were done useing sqlmap.
