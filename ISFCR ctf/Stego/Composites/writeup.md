@@ -1,5 +1,5 @@
 # Composites
-Author: [Gallifrey](https://github.com/gall1grey)
+Author: [Gallifrey](https://github.com/gall1frey)
 
 # Challenge
 ```
@@ -15,7 +15,7 @@ the one composite number inside the file.
 
 writing a code for it:
 
-```
+```python
 import sympy 
 
 f = open('prime_candidate.txt','r')
