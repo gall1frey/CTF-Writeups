@@ -1,5 +1,5 @@
 # Squashed Pizza
-Author: [Gallifrey](https://github.com/gall1grey)
+Author: [Gallifrey](https://github.com/gall1frey)
 
 # Requirements
 
@@ -18,7 +18,7 @@ The file is literally, _squashed_. All you need to do is change its dimensions
 
 So, we write a python code for that:
 
-```
+```python
 import cv2
 from math import sqrt
 import numpy as np
