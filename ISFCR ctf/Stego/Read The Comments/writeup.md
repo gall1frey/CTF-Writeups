@@ -1,5 +1,5 @@
 # Read The Comments
-Author: [Gallifrey](https://github.com/gall1grey)
+Author: [Gallifrey](https://github.com/gall1frey)
 
 # Challenge
 
