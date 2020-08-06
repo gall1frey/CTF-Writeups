@@ -1,5 +1,5 @@
 # Chess Cheater
-Author: [Gallifrey](https://github.com/gall1grey)
+Author: [Gallifrey](https://github.com/gall1frey)
 
 # Requirements
 
