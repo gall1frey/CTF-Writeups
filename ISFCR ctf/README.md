@@ -1,4 +1,4 @@
-# ISFCT CTF writeup
+# ISFCR CTF writeup
 
 This is a writeup.
 I may not remember all challs.
