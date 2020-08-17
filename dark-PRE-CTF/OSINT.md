@@ -9,7 +9,7 @@ Flag Format: darkCTF{operator:}
 ```
 ## Solution
 
-Basic googling gives you the operator loc. Also check other operators (here)[https://www.spyfu.com/blog/google-search-operators/]
+Basic googling gives you the operator loc. Also check other operators [here](https://www.spyfu.com/blog/google-search-operators/) 
 
 The flag is:
 ```
