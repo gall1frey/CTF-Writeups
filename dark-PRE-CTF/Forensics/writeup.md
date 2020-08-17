@@ -19,7 +19,7 @@ Opening the image ```OneBy2.png```, we get a partial flag.
 The title suggests that the flag is divided into two parts.
 So, we try all the usual stuff, file, exiftool, binwalk.
 
-Binwalk yeilds something interesting:
+Binwalk yields something interesting:
 ```
 $ binwalk OneBy2.png
 
