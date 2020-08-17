@@ -19,7 +19,7 @@ encrypted.txt
 
 Aside from the obvious n,e and c given, the name Really Secure Algo (RSA) was a hint at the kindof encryption used.
 ```n``` in RSA is the product of two large primes, ```p``` and ```q```.
-The security of the algorithm depends on having a large enough value for p and q so factorization is a very 
+The security of the algorithm depends on having a large enough value for p and q so that factorization becomes a very 
 time-expensive process.
 The obvious mistake is that ```n``` is small.
 
