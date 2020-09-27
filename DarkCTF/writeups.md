@@ -144,3 +144,42 @@ The flag is:
 ```
 DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}
 ```
+
+# Misc
+
+## Minesweeper
+```
+I'm lucky to be surrounded by even-minded people from all around. Flag is not in the regular format.
+
+Submit flag in darkCTF{flag} format.
+```
+### Solution
+
+Searching for eNB ID on 
+https://www.cellmapper.net/map?MCC=310&MNC=410&type=LTE&latitude=32.82059844945921&longitude=-24.577407925948716&zoom=6.337042870587223&showTowers=true&showTowerLabels=true&clusterEnabled=true&tilesEnabled=true&showOrphans=false&showNoFrequencyOnly=false&showFrequencyOnly=false&showBandwidthOnly=false&DateFilterType=None&showHex=false&showVerifiedOnly=false&showUnverifiedOnly=false&showLTECAOnly=false&showENDCOnly=false&showBand=0&showSectorColours=true
+fives us the coordinates to the cell tower, 32.82059844945921 and -24.577407925948716
+
+The flag is:
+```
+darkCTF{32.8,-24.5}
+```
+
+## Time Travel
+```
+Can you find the exact date this pic was taken (It is Australian forest fire)
+
+Flag Format: darkCTF{dd-mm-yyyy}
+```
+An image file, ```TimeTravel.jpg``` was also given.
+
+![](TimeTravel.jpg)
+
+### Solution
+
+Reverse google searching yields that the image is courtsey of NASA, taken from the ISS. Going to their website, https://worldview.earthdata.nasa.gov/?v=149.0555510075992,-31.596054937400808,156.75441151318898,-27.81679659025584&t=2019-09-15-T22%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=australia_fires_2019_2020,
+we find that the photo was taken on 15th sept, 2019.
+
+The flag is:
+```
+darkCTF{15-09-2019}
+```
