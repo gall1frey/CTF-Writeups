@@ -1,0 +1,146 @@
+# OSINT
+Author: [Gallifrey](https://github.com/gall1frey)
+
+## Find cell
+```
+I lost my phone while I was travelling back to home, I was able to get back my eNB ID, MCC and MNC could you help me catch the tower it was last found.
+note: decimal value upto 1 digit
+Flag Format : darkCTF{latitude,longitude}
+```
+### Solution
+
+Searching for eNB ID on 
+https://www.cellmapper.net/map?MCC=310&MNC=410&type=LTE&latitude=32.82059844945921&longitude=-24.577407925948716&zoom=6.337042870587223&showTowers=true&showTowerLabels=true&clusterEnabled=true&tilesEnabled=true&showOrphans=false&showNoFrequencyOnly=false&showFrequencyOnly=false&showBandwidthOnly=false&DateFilterType=None&showHex=false&showVerifiedOnly=false&showUnverifiedOnly=false&showLTECAOnly=false&showENDCOnly=false&showBand=0&showSectorColours=true
+fives us the coordinates to the cell tower, 32.82059844945921 and -24.577407925948716
+
+The flag is:
+```
+darkCTF{32.8,-24.5}
+```
+
+## Time Travel
+```
+Can you find the exact date this pic was taken (It is Australian forest fire)
+
+Flag Format: darkCTF{dd-mm-yyyy}
+```
+An image file, ```TimeTravel.jpg``` was also given.
+
+![](TimeTravel.jpg)
+
+### Solution
+
+Reverse google searching yields that the image is courtsey of NASA, taken from the ISS. Going to their website, https://worldview.earthdata.nasa.gov/?v=149.0555510075992,-31.596054937400808,156.75441151318898,-27.81679659025584&t=2019-09-15-T22%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=australia_fires_2019_2020,
+we find that the photo was taken on 15th sept, 2019.
+
+The flag is:
+```
+darkCTF{15-09-2019}
+```
+
+# Cryptography
+
+## Pipe Rhyme
+```
+Chall:- Pipe Rhyme
+
+Chall Desc:- Wow you are so special.
+
+N=0x3b7c97ceb5f01f8d2095578d561cad0f22bf0e9c94eb35a9c41028247a201a6db95f
+e=0x10001
+ct=0x1B5358AD42B79E0471A9A8C84F5F8B947BA9CB996FA37B044F81E400F883A309B886
+
+```
+
+### Solution
+
+This is a simple RSA challenge. 
+On converting N, e and ct to decimal, we get:
+```
+N = 1763350599372172240188600248087473321738860115540927328389207609428163138985769311
+e = 65537
+ct = 810005773870709891389047844710609951449521418582816465831855191640857602960242822
+```
+Using factordb to get the factors p and q, of N:
+```
+p = 31415926535897932384626433832795028841
+q =  56129192858827520816193436882886842322337671
+```
+Now that we have p, q and e, we can calculate totient and the secret key d as follows:
+```
+totient = (p-1)*(q-1) = 1763350599372172240188600248087473321682730891266173271675081787918842463868402800
+ed≡1modϕ
+therefore d = 188047321955721375508157638187334651345661324123156155999468187676652730213105073
+```
+Then using n and d to decrypt the message, we get:
+```
+darkCTF{4v0iD_us1ngg_p1_pr1mes}
+```
+
+Or, using a simple python script,
+```python
+from Crypto.Util.number import *
+n = 1763350599372172240188600248087473321738860115540927328389207609428163138985769311
+ct = 810005773870709891389047844710609951449521418582816465831855191640857602960242822
+p = 31415926535897932384626433832795028841
+q =  56129192858827520816193436882886842322337671
+totient = (p-1)*(q-1)
+d = inverse(e,totient)
+print(long_to_bytes(pow(ct,d,n)))
+```
+
+The flag is:
+```
+darkCTF{4v0iD_us1ngg_p1_pr1mes}
+```
+
+## WEIRD ENCRYPTION
+```
+I made this weird encryption I hope you can crack it.
+```
+
+### File:
+```
+prefix="Hello. Your flag is DarkCTF{"
+suffix="}."
+main_string="c an u br ea k th is we ir d en cr yp ti on".split()
+
+clear_text = prefix + flag + suffix
+enc_text = ""
+for letter in clear_text:
+    c1 = ord(letter) / 16
+    c2 = ord(letter) % 16
+    enc_text += main_string[c1]
+    enc_text += main_string[c2]
+
+print enc_text
+```
+and
+```
+eawethkthcrthcrthonutiuckirthoniskisuucthththcrthanthisucthirisbruceaeathanisutheneabrkeaeathisenbrctheneacisirkonbristhwebranbrkkonbrisbranthypbrbrkonkirbrciskkoneatibrbrbrbrtheakonbrisbrckoneauisubrbreacthenkoneaypbrbrisyputi
+```
+
+### Solution
+
+On close inspection of the code, we know that the encrypted message can be divided into fragments given by the elements of the list ```main_string```.
+So we split the encrypted string into said fragments. We get:
+```
+ea we th k th ...
+```
+We put that in a list, ```dec_list```, and run the following python code on it to get our flag:
+```python
+msg = ''
+main_string="c an u br ea k th is we ir d en cr yp ti on".split()
+dec_list = list() #That list we got
+for i in range(0,len(dec_list),2):
+  msg += chr(main_string.index(dec_list[i])*16 + main_string.index(dec_list[i+1]))
+  
+print(msg)
+```
+
+output: ```Hello. Your flag is DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}.```
+
+The flag is:
+```
+DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}
+```
