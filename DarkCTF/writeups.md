@@ -153,33 +153,53 @@ I'm lucky to be surrounded by even-minded people from all around. Flag is not in
 
 Submit flag in darkCTF{flag} format.
 ```
+A file, minesweeper.txt, with a huge matrix was also provided.
+
 ### Solution
 
-Searching for eNB ID on 
-https://www.cellmapper.net/map?MCC=310&MNC=410&type=LTE&latitude=32.82059844945921&longitude=-24.577407925948716&zoom=6.337042870587223&showTowers=true&showTowerLabels=true&clusterEnabled=true&tilesEnabled=true&showOrphans=false&showNoFrequencyOnly=false&showFrequencyOnly=false&showBandwidthOnly=false&DateFilterType=None&showHex=false&showVerifiedOnly=false&showUnverifiedOnly=false&showLTECAOnly=false&showENDCOnly=false&showBand=0&showSectorColours=true
-fives us the coordinates to the cell tower, 32.82059844945921 and -24.577407925948716
+Got first blood on this one.
+On first look at the challenge, I noticed not as many odd numbers in the matrix as there were even. So I figured the flag lay in those numbers that had even numbers on all four sides, right, left, top and bottom. 
+
+The next part was writing a python script to find those values, and it was simple.
+The following script got me the reverse flag. 
+```python
+mat = [[]] #The matrix we got from the file
+req_list = [] #store all required nos
+for i in range(len(mat)):
+    for j in range(1,len(i)-1):
+        if mat[i-1][j]%2 == 0 and mat[i+1][j]%2 == 0 and mat[i][j-1]%2 == 0 and mat[i][j+1]%2 == 0:
+            req_list.append(chr(mat[i][j]))
+print(''.join(req_list)) #Prints rev flag
+
+print(''.join(req_list)[::-1]) #Prints flag
+```
 
 The flag is:
 ```
 darkCTF{32.8,-24.5}
 ```
 
-## Time Travel
+## Secret Of The Contract
 ```
-Can you find the exact date this pic was taken (It is Australian forest fire)
-
-Flag Format: darkCTF{dd-mm-yyyy}
+Ropsten network contains my dark secret. Help us find it. Name of the contract was 0x6e5EA18371748Db7F12A70037d647cDFCf458e45
 ```
-An image file, ```TimeTravel.jpg``` was also given.
-
-![](TimeTravel.jpg)
-
 ### Solution
 
-Reverse google searching yields that the image is courtsey of NASA, taken from the ISS. Going to their website, https://worldview.earthdata.nasa.gov/?v=149.0555510075992,-31.596054937400808,156.75441151318898,-27.81679659025584&t=2019-09-15-T22%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=australia_fires_2019_2020,
-we find that the photo was taken on 15th sept, 2019.
+The address is of a contract in the ropsten network of the etherium blockchain. On searching for the address on https://ropsten.etherscan.io/, we get two transactions.
+(The third on was done after I had solved the challenge, but the picture was taken afterwards)
+
+![](transactions.png)
+
+On viewing the data of the two transactions, we see a hex code, divided into three parts:
+
+![](t_hex1.png)
+![](t_hex2.png)
+
+The message: ``` Hmm-6461726B4354467B337468337233756D5F353730723467335F3772346e3534633731306e7d0 ```
+
+Converting that hex to text, we get the flag.
 
 The flag is:
 ```
-darkCTF{15-09-2019}
+darkCTF{3th3r3um_570r4g3_7r4n54c710n}
 ```
