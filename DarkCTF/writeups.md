@@ -174,9 +174,14 @@ print(''.join(req_list)) #Prints rev flag
 print(''.join(req_list)[::-1]) #Prints flag
 ```
 
+```
+EECNaEITaPDNaNOITaVRESBOEHVaJFHUOYSIGaLF
+FLaGISYOUHFJaVHEOBSERVaTIONaNDPaTIEaNCEE
+```
+
 The flag is:
 ```
-darkCTF{32.8,-24.5}
+darkCTF{YOUHaVEOBSERVaTIONaNDPaTIENCEE}
 ```
 
 ## Secret Of The Contract
@@ -313,9 +318,55 @@ A zip file, ```file.zip``` was also provided, which contained a single file, ```
 
 ### Solution
 
-Running the ```file``` command on 
+Running ```binwalk``` on the extracted ```file.mp3``` (and also the fact that the file won't play in an audio player) tells us that it is actually an archive.
+So we rename ```file.mp3``` to ```chall.zip```, and extract it.
+
+![](forensics/unzip_chall.png)
+
+We have an xml file for powershell. That's where we look.
+
+This line looks interesting:
+```
+echo "ZGFya0NURntDMG1tNG5kXzBuX3AwdzNyc2gzbGx9" | base64 -d
+```
+Upon running that on the terminal, we get our flag: ```darkCTF{C0mm4nd_0n_p0w3rsh3ll}```
 
 The flag is:
 ```
-darkCTF{}
+darkCTF{C0mm4nd_0n_p0w3rsh3ll}
+```
+
+## Suspicious
+
+```
+Suspicious software created a key. I want that key to track that software.
+
+File Same as in Powershell.
+```
+
+### Solution
+
+The file from the previous challenge has another file. A windows registry file called ```suspicious.reg```.
+DO NOT OPEN THAT WITH REGEDIT!
+
+![](forensics/unzip_chall.png)
+
+Since it has registry entries, we try to search for one of the "suspicious" software.
+Grep doesn't work here, for some reason, so I opened the file in a text editor and searched for the word suspicious. That did the trick.
+
+Here's all the interesting stuff I got:
+```
+[HKEY_USERS\S-1-5-21-1473425136-1446414652-728660776-1000\Software\Policies\Microsoft\SystemCertificates\TrustedPeople\TrustedPeople Flag]
+"FLAG"="darkCTF{i_don't_trust_anyone}"
+...
+
+[HKEY_USERS\S-1-5-21-1473425136-1446414652-728660776-1000\Software\Suspicious]
+@="ZGFya0NURntIM3IzXzFzXzV1NXAxYzEwdXN9"
+```
+
+The first flag was a fake one, but decoding the key of the suspicious software from base64 gets us the real flag, ```darkCTF{H3r3_1s_5u5p1c10us}```
+
+The flag is:
+```
+darkCTF{H3r3_1s_5u5p1c10us}
 ```
