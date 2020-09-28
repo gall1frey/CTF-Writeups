@@ -17,6 +17,7 @@ Author: [Gallifrey](https://github.com/gall1frey)
     - [AW](#AW)
     - [Powershell](#Powershell)
     - [Suspicious](#Suspicious)
+- [Web](#web)
 
 # OSINT<a name="osint"></a>
 ## Find cell<a name="findCell"></a>
@@ -392,3 +393,96 @@ The flag is:
 ```
 darkCTF{H3r3_1s_5u5p1c10us}
 ```
+
+# Web<a name="web"></a>
+
+## Source<a name="Source"></a>
+```
+Don't know source is helpful or not !!
+http://web.darkarmy.xyz
+```
+
+A source file was also provided, and is given below:
+
+```html
+<html>
+    <head>
+        <title>SOURCE</title>
+        <style>
+            #main {
+    height: 100vh;
+}
+        </style>
+    </head>
+    <body><center>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<?php
+$web = $_SERVER['HTTP_USER_AGENT'];
+if (is_numeric($web)){
+      if (strlen($web) < 4){
+          if ($web > 10000){
+                 echo ('<div class="w3-panel w3-green"><h3>Correct</h3>
+  <p>darkCTF{}</p></div>');
+          } else {
+                 echo ('<div class="w3-panel w3-red"><h3>Wrong!</h3>
+  <p>Ohhhhh!!! Very Close  </p></div>');
+          }
+      } else {
+             echo ('<div class="w3-panel w3-red"><h3>Wrong!</h3>
+  <p>Nice!!! Near But Far</p></div>');
+      }
+} else {
+    echo ('<div class="w3-panel w3-red"><h3>Wrong!</h3>
+  <p>Ahhhhh!!! Try Not Easy</p></div>');
+}
+?>
+</center>
+<!-- Source is helpful -->
+    </body>
+</html>
+```
+
+### Solution
+
+According to the file, we get the flag only when the user-agent is a number greater than 10000.
+But the catch is that the length of the user-agent string must be at most 3.
+
+A work-around to this is that php accepts the e notation.
+
+The e notation means a number ```1e3``` is interpreted as ```1*(10^3)```, or 1000. With this knowledge, we change our user-agent to ```2e4``` (effectively 20000), and send a get request.
+
+![](web/sourceRequest.png)
+
+And the flag is in the response:
+
+![](web/sourceResponse/png)
+
+The flag is:
+```
+darkCTF{changeing_http_user_agent_is_easy}
+```
+
+## Simple_SQL<a name="SimpleSQL"></a>
+```
+Try to find username and password
+```
+
+### Solution
+
+Viewing the source code, we find this comment:
+```html
+<!-- Try id as parameter  --> 
+```
+So I tried injecting the parameter id in the url.
+
+```http://simplesql.darkarmy.xyz/?id=1```
+This got me the response, ```Username : LOL Password : Try```
+
+I tried changing the id parameter, and got the flag at id=9: ```Username : flag Password : darkCTF{it_is_very_easy_to_find}```
+
+
+The flag is:
+```
+darkCTF{it_is_very_easy_to_find}
+```
+
