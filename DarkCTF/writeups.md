@@ -20,6 +20,10 @@ Author: [Gallifrey](https://github.com/gall1frey)
 - [Web](#web)
     - [Source](#Source)
     - [Simple_SQL](#SimpleSQL)
+- [Linux](#linux)
+    - [Linux Starter](#LinuxStarter)
+    
+
 
 # OSINT<a name="osint"></a>
 ## Find cell<a name="findCell"></a>
@@ -495,7 +499,7 @@ darkCTF{it_is_very_easy_to_find}
 
 # Linux<a name="linux"></a>
 
-## linux starter<a name="LinuxStarter"></a>
+## Linux Starter<a name="LinuxStarter"></a>
 ```
 Don't Try to break this jail
 
