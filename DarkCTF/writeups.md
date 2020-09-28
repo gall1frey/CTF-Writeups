@@ -1,10 +1,10 @@
 # DarkCTF Writeups
 Author: [Gallifrey](https://github.com/gall1frey)
 
-    * [Osint](#osint)
-    * [Cryptography](#crypto)
-    * [Misc](#misc)
-    * [Forensics](#forensics)
+    - [Osint](#osint)
+    - [Cryptography](#crypto)
+    - [Misc](#misc)
+    - [Forensics](#forensics)
 
 # OSINT<a name="osint"></a>
 ## Find cell
