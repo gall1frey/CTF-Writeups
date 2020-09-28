@@ -192,8 +192,8 @@ The address is of a contract in the ropsten network of the etherium blockchain. 
 
 On viewing the data of the two transactions, we see a hex code, divided into three parts:
 
-![](t_hex1.png)
-![](t_hex2.png)
+![](misc/t_hex1.png)
+![](misc/t_hex2.png)
 
 The message: ``` Hmm-6461726B4354467B337468337233756D5F353730723467335F3772346e3534633731306e7d0 ```
 
