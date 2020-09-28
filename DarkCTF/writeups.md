@@ -306,7 +306,7 @@ Afterwards, opening the mp4 file in audacity and viewing the spectrogram got me 
 
 The flag is:
 ```
-darkCTF{}
+darkCTF{1_l0v3_5p3ctr3_fr0m_4l4n}
 ```
 
 ## Powershell
