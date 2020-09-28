@@ -3,20 +3,20 @@ Author: [Gallifrey](https://github.com/gall1frey)
 
 ### Contents
 - [Osint](#osint)
-    -[Find Cell](#findCell)
-    -[Time Travel](#TimeTravel)
+    - [Find Cell](#findCell)
+    - [Time Travel](#TimeTravel)
 - [Cryptography](#crypto)
-    -[Pipe Rhyme](#PipeRhyme)
-    -[Weird Encryption](#WeirdEncryption)
+    - [Pipe Rhyme](#PipeRhyme)
+    - [Weird Encryption](#WeirdEncryption)
 - [Misc](#misc)
-    -[Minesweeper](#Minesweeper)
-    -[Secret of the Contract](#SecretOfTheContract)
+    - [Minesweeper](#Minesweeper)
+    - [Secret of the Contract](#SecretOfTheContract)
 - [Forensics](#forensics)
-    -[Wolfie's Contacts](#WolfiesContacts)
-    -[Wolfie's Password](#WolfiesPassword)
-    -[AW](#AW)
-    -[Powershell](#Powershell)
-    -[Suspicious](#Suspicious)
+    - [Wolfie's Contacts](#WolfiesContacts)
+    - [Wolfie's Password](#WolfiesPassword)
+    - [AW](#AW)
+    - [Powershell](#Powershell)
+    - [Suspicious](#Suspicious)
 
 # OSINT<a name="osint"></a>
 ## Find cell<a name="findCell"></a>
@@ -27,8 +27,7 @@ Flag Format : darkCTF{latitude,longitude}
 ```
 ### Solution
 
-Searching for eNB ID on 
-https://www.cellmapper.net/map?MCC=310&MNC=410&type=LTE&latitude=32.82059844945921&longitude=-24.577407925948716&zoom=6.337042870587223&showTowers=true&showTowerLabels=true&clusterEnabled=true&tilesEnabled=true&showOrphans=false&showNoFrequencyOnly=false&showFrequencyOnly=false&showBandwidthOnly=false&DateFilterType=None&showHex=false&showVerifiedOnly=false&showUnverifiedOnly=false&showLTECAOnly=false&showENDCOnly=false&showBand=0&showSectorColours=true
+Searching for eNB ID on [here](https://www.cellmapper.net/map?MCC=310&MNC=410&type=LTE&latitude=32.82059844945921&longitude=-24.577407925948716&zoom=6.337042870587223&showTowers=true&showTowerLabels=true&clusterEnabled=true&tilesEnabled=true&showOrphans=false&showNoFrequencyOnly=false&showFrequencyOnly=false&showBandwidthOnly=false&DateFilterType=None&showHex=false&showVerifiedOnly=false&showUnverifiedOnly=false&showLTECAOnly=false&showENDCOnly=false&showBand=0&showSectorColours=true)
 fives us the coordinates to the cell tower, 32.82059844945921 and -24.577407925948716
 
 The flag is:
@@ -48,7 +47,7 @@ An image file, ```TimeTravel.jpg``` was also given.
 
 ### Solution
 
-Reverse google searching yields that the image is courtsey of NASA, taken from the ISS. Going to their website, https://worldview.earthdata.nasa.gov/?v=149.0555510075992,-31.596054937400808,156.75441151318898,-27.81679659025584&t=2019-09-15-T22%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=australia_fires_2019_2020,
+Reverse google searching yields that the image is courtsey of NASA, taken from the ISS. Going to their [website](https://worldview.earthdata.nasa.gov/?v=149.0555510075992,-31.596054937400808,156.75441151318898,-27.81679659025584&t=2019-09-15-T22%3A00%3A00Z&l=VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&tr=australia_fires_2019_2020),
 we find that the photo was taken on 15th sept, 2019.
 
 The flag is:
@@ -118,7 +117,7 @@ I made this weird encryption I hope you can crack it.
 ```
 
 ### File:
-```
+```python
 prefix="Hello. Your flag is DarkCTF{"
 suffix="}."
 main_string="c an u br ea k th is we ir d en cr yp ti on".split()
@@ -245,7 +244,8 @@ It had the following folders:
 Contacts looked promising.
 Running ```ls -al``` showed us there were 9 contacts.
 
-```drwxrwxrwx 1 gallifrey gallifrey 4096 Sep 28 09:32  .
+```
+drwxrwxrwx 1 gallifrey gallifrey 4096 Sep 28 09:32  .
 drwxrwxrwx 1 gallifrey gallifrey 4096 Sep 28 09:32  ..
 -rwxrwxrwx 1 gallifrey gallifrey  865 Sep 20 23:52  agent.contact
 -rwxrwxrwx 1 gallifrey gallifrey  869 Sep 20 23:52 'Agent P.contact'
@@ -295,11 +295,15 @@ Since the challenge states that Wolfie uses the same password everywhere, it sta
 I used ```johntheripper``` to crack the password.
 First, I got the hash of the rar file using ```rar2john``` like:
 
-```$ rar2john readme.rar > hash```
+```shell
+$ rar2john readme.rar > hash
+```
 
 Then, used john to crack this hash with a wordlist attack, using rockyou.txt.
 
-```$ john hash --wordlist=/usr/share/wordlists/rockyou.txt```
+```shell
+$ john hash --wordlist=/usr/share/wordlists/rockyou.txt
+```
 
 This gave me the password, ```easypeasy```
 
@@ -344,8 +348,8 @@ So we rename ```file.mp3``` to ```chall.zip```, and extract it.
 We have an xml file for powershell. That's where we look.
 
 This line looks interesting:
-```
-echo "ZGFya0NURntDMG1tNG5kXzBuX3AwdzNyc2gzbGx9" | base64 -d
+```shell
+$echo "ZGFya0NURntDMG1tNG5kXzBuX3AwdzNyc2gzbGx9" | base64 -d
 ```
 Upon running that on the terminal, we get our flag: ```darkCTF{C0mm4nd_0n_p0w3rsh3ll}```
 
