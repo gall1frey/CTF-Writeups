@@ -3,12 +3,23 @@ Author: [Gallifrey](https://github.com/gall1frey)
 
 ### Contents
 - [Osint](#osint)
+    -[Find Cell](#findCell)
+    -[Time Travel](#TimeTravel)
 - [Cryptography](#crypto)
+    -[Pipe Rhyme](#PipeRhyme)
+    -[Weird Encryption](#WeirdEncryption)
 - [Misc](#misc)
+    -[Minesweeper](#Minesweeper)
+    -[Secret of the Contract](#SecretOfTheContract)
 - [Forensics](#forensics)
+    -[Wolfie's Contacts](#WolfiesContacts)
+    -[Wolfie's Password](#WolfiesPassword)
+    -[AW](#AW)
+    -[Powershell](#Powershell)
+    -[Suspicious](#Suspicious)
 
 # OSINT<a name="osint"></a>
-## Find cell
+## Find cell<a name="findCell"></a>
 ```
 I lost my phone while I was travelling back to home, I was able to get back my eNB ID, MCC and MNC could you help me catch the tower it was last found.
 note: decimal value upto 1 digit
@@ -25,7 +36,7 @@ The flag is:
 darkCTF{32.8,-24.5}
 ```
 
-## Time Travel
+## Time Travel<a name="TimeTravel"></a>
 ```
 Can you find the exact date this pic was taken (It is Australian forest fire)
 
@@ -47,7 +58,7 @@ darkCTF{15-09-2019}
 
 # Cryptography<a name="crypto"></a>
 
-## Pipe Rhyme
+## Pipe Rhyme<a name="PipeRhyme"></a>
 ```
 Chall:- Pipe Rhyme
 
@@ -101,7 +112,7 @@ The flag is:
 darkCTF{4v0iD_us1ngg_p1_pr1mes}
 ```
 
-## WEIRD ENCRYPTION
+## WEIRD ENCRYPTION<a name="WeirdEncryption"></a>
 ```
 I made this weird encryption I hope you can crack it.
 ```
@@ -154,7 +165,7 @@ DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}
 
 # Misc<a name="misc"></a>
 
-## Minesweeper
+## Minesweeper<a name="Minesweeper"></a>
 ```
 I'm lucky to be surrounded by even-minded people from all around. Flag is not in the regular format.
 
@@ -191,7 +202,7 @@ The flag is:
 darkCTF{YOUHaVEOBSERVaTIONaNDPaTIENCEE}
 ```
 
-## Secret Of The Contract
+## Secret Of The Contract<a name="SecretOfTheContract"></a>
 ```
 Ropsten network contains my dark secret. Help us find it. Name of the contract was 0x6e5EA18371748Db7F12A70037d647cDFCf458e45
 ```
@@ -218,7 +229,7 @@ darkCTF{3th3r3um_570r4g3_7r4n54c710n}
 
 # Forensics<a name="forensics"></a>
 
-## Wolfie's Contacts
+## Wolfie's Contacts<a name="WolfiesContacts"></a>
 ```
 Wolfie is doing some illegal work with his friends find his contacts.
 ```
@@ -268,7 +279,7 @@ The flag is:
 darkCTF{C0ntacts_4re_1mp0rtant}
 ```
 
-## Wolfie's Password
+## Wolfie's Password<a name="WolfiesPassword"></a>
 ```
  We have found another device which is password protected but he uses same password everywhere find his password
 
@@ -297,7 +308,7 @@ The flag is:
 darkCTF{easypeasy}
 ```
 
-## AW
+## AW<a name="AW"></a>
 ```
  "Hello, hello, Can you hear me, as I scream your Flag! "
 ```
@@ -316,7 +327,7 @@ The flag is:
 darkCTF{1_l0v3_5p3ctr3_fr0m_4l4n}
 ```
 
-## Powershell
+## Powershell<a name="Powershell"></a>
 
 ```
 I want to know what is happening in my Windows Powershell.
@@ -343,7 +354,7 @@ The flag is:
 darkCTF{C0mm4nd_0n_p0w3rsh3ll}
 ```
 
-## Suspicious
+## Suspicious<a name="Suspicious"></a>
 
 ```
 Suspicious software created a key. I want that key to track that software.
