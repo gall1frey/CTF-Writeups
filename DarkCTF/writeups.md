@@ -163,12 +163,12 @@ On first look at the challenge, I noticed not as many odd numbers in the matrix 
 The next part was writing a python script to find those values, and it was simple.
 The following script got me the reverse flag. 
 ```python
-mat = [[]] #The matrix we got from the file
+array = [[]] #The matrix from the file
 req_list = [] #store all required nos
-for i in range(len(mat)):
+for i in range(len(array)):
     for j in range(1,len(i)-1):
-        if mat[i-1][j]%2 == 0 and mat[i+1][j]%2 == 0 and mat[i][j-1]%2 == 0 and mat[i][j+1]%2 == 0:
-            req_list.append(chr(mat[i][j]))
+        if mat[i-1][j]%2 == 0 and array[i+1][j]%2 == 0 and array[i][j-1]%2 == 0 and array[i][j+1]%2 == 0:
+            req_list.append(chr(array[i][j]))
 print(''.join(req_list)) #Prints rev flag
 
 print(''.join(req_list)[::-1]) #Prints flag
@@ -220,47 +220,102 @@ It had the following folders:
 ![](forensics/folders.png)
 
 Contacts looked promising.
-Viewing all contacts    
+Running ```ls -al``` showed us there were 9 contacts.
 
-```python
-mat = [[]] #The matrix we got from the file
-req_list = [] #store all required nos
-for i in range(len(mat)):
-    for j in range(1,len(i)-1):
-        if mat[i-1][j]%2 == 0 and mat[i+1][j]%2 == 0 and mat[i][j-1]%2 == 0 and mat[i][j+1]%2 == 0:
-            req_list.append(chr(mat[i][j]))
-print(''.join(req_list)) #Prints rev flag
-
-print(''.join(req_list)[::-1]) #Prints flag
+```drwxrwxrwx 1 gallifrey gallifrey 4096 Sep 28 09:32  .
+drwxrwxrwx 1 gallifrey gallifrey 4096 Sep 28 09:32  ..
+-rwxrwxrwx 1 gallifrey gallifrey  865 Sep 20 23:52  agent.contact
+-rwxrwxrwx 1 gallifrey gallifrey  869 Sep 20 23:52 'Agent P.contact'
+-rwxrwxrwx 1 gallifrey gallifrey 1395 Sep 20 23:49  broker.contact
+-rwxrwxrwx 1 gallifrey gallifrey 1271 Sep 20 23:49  dealer.contact
+-rwxrwxrwx 1 gallifrey gallifrey  863 Sep 20 23:52  Ferb.contact
+-rwxrwxrwx 1 gallifrey gallifrey 1251 Sep 20 23:51 'Money Giver.contact'
+-rwxrwxrwx 1 gallifrey gallifrey  869 Sep 20 23:52  Phineas.contact
+-rwxrwxrwx 1 gallifrey gallifrey 1240 Sep 20 23:51  target.contact
+-rwxrwxrwx 1 gallifrey gallifrey 1600 Sep 20 23:48  wolfie.contact
 ```
+grep-ing for the flag using ```cat * | grep dark``` gives us:
+```
+ <c:Notes>darkCTF{</c:Notes><c:CreationDate>2020-09-20T18:18:41Z</c:CreationDate><c:Extended xsi:nil="true"/>
+```
+The flag is not complete, but note that it is in the Notes tag.
+grep-ing for all Notes tags using ```cat * | grep Notes``` gives us all parts of the flag:
+```
+ <c:Notes c:Version="1" c:ModificationDate="2020-09-20T18:19:52Z">C0ntacts_
+</c:Notes><c:CreationDate>2020-09-20T18:19:12Z</c:CreationDate><c:Extended xsi:nil="true"/>
+        <c:Notes>darkCTF{</c:Notes><c:CreationDate>2020-09-20T18:18:41Z</c:CreationDate><c:Extended xsi:nil="true"/>
+        <c:Notes>1mp0rtant}</c:Notes><c:CreationDate>2020-09-20T18:21:20Z</c:CreationDate><c:Extended xsi:nil="true"/>
+        <c:Notes>4re_
+</c:Notes><c:CreationDate>2020-09-20T18:19:55Z</c:CreationDate><c:Extended xsi:nil="true"/>
+        <c:Notes>All HAil Wolfiee!!!</c:Notes><c:CreationDate>2020-09-20T18:17:25Z</c:CreationDate><c:Extended xsi:nil="true"/>
+```
+Re-ordering the flag to make sense, we get ```darkCTF{C0ntacts_4re_1mp0rtant}```
 
 The flag is:
 ```
-darkCTF{32.8,-24.5}
+darkCTF{C0ntacts_4re_1mp0rtant}
 ```
 
-## Secret Of The Contract
+## Wolfie's Password
 ```
-Ropsten network contains my dark secret. Help us find it. Name of the contract was 0x6e5EA18371748Db7F12A70037d647cDFCf458e45
+ We have found another device which is password protected but he uses same password everywhere find his password
+
+Note: Use the same file provided in Wolfie's Contacts
+
+Flag Format: darkCTF{password}
 ```
 ### Solution
 
-The address is of a contract in the ropsten network of the etherium blockchain. On searching for the address on https://ropsten.etherscan.io/, we get two transactions.
-(The third on was done after I had solved the challenge, but the picture was taken afterwards)
+In the previous ```.E01``` file, there is a directory called ```not important files```. That directory contains a password protected rar file, ```readme.rar```.
+Since the challenge states that Wolfie uses the same password everywhere, it stands to reason that the required password is that of this rar file.
 
-![](misc/transactions.png)
+I used ```johntheripper``` to crack the password.
+First, I got the hash of the rar file using ```rar2john``` like:
 
-On viewing the data of the two transactions, we see a hex code, divided into three parts:
+```$ rar2john readme.rar > hash```
 
-![](misc/t_hex1.png)
-![](misc/t_hex2.png)
+Then, used john to crack this hash with a wordlist attack, using rockyou.txt.
 
-The message: ``` Hmm-6461726B4354467B337468337233756D5F353730723467335F3772346e3534633731306e7d0 ```
+```$ john hash --wordlist=/usr/share/wordlists/rockyou.txt```
 
-Converting that hex to text, we get the flag.
+This gave me the password, ```easypeasy```
 
 The flag is:
 ```
-darkCTF{3th3r3um_570r4g3_7r4n54c710n}
+darkCTF{easypeasy}
 ```
 
+## AW
+```
+ "Hello, hello, Can you hear me, as I scream your Flag! "
+```
+A video file, Spectre.mp4 was also provided.
+
+### Solution
+
+When the usual tools, exiftool, binwalk and hexdump didn't lead anywhere, I figured there was something hidden in the audio itself. 
+To view the spectrogram in audacity, I had to install a plugin from https://www.audacityteam.org/download/plug-ins
+Afterwards, opening the mp4 file in audacity and viewing the spectrogram got me the flag.
+
+![](forensics/spectrogram.png)
+
+The flag is:
+```
+darkCTF{}
+```
+
+## Powershell
+
+```
+I want to know what is happening in my Windows Powershell.
+```
+A zip file, ```file.zip``` was also provided, which contained a single file, ```file.mp3```
+
+### Solution
+
+Running the ```file``` command on 
+
+The flag is:
+```
+darkCTF{}
+```
