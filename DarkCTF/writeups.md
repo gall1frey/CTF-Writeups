@@ -203,3 +203,64 @@ The flag is:
 ```
 darkCTF{3th3r3um_570r4g3_7r4n54c710n}
 ```
+
+# Forensics
+
+## Wolfie's Contacts
+```
+Wolfie is doing some illegal work with his friends find his contacts.
+```
+A file, wolfie.E01 was also provided.
+
+### Solution
+
+Used [OSF Mount](https://www.osforensics.com/tools/mount-disk-images.html) to mount the ```.E01``` file.
+It had the following folders:
+
+![](forensics/folders.png)
+
+Contacts looked promising.
+Viewing all contacts    
+
+```python
+mat = [[]] #The matrix we got from the file
+req_list = [] #store all required nos
+for i in range(len(mat)):
+    for j in range(1,len(i)-1):
+        if mat[i-1][j]%2 == 0 and mat[i+1][j]%2 == 0 and mat[i][j-1]%2 == 0 and mat[i][j+1]%2 == 0:
+            req_list.append(chr(mat[i][j]))
+print(''.join(req_list)) #Prints rev flag
+
+print(''.join(req_list)[::-1]) #Prints flag
+```
+
+The flag is:
+```
+darkCTF{32.8,-24.5}
+```
+
+## Secret Of The Contract
+```
+Ropsten network contains my dark secret. Help us find it. Name of the contract was 0x6e5EA18371748Db7F12A70037d647cDFCf458e45
+```
+### Solution
+
+The address is of a contract in the ropsten network of the etherium blockchain. On searching for the address on https://ropsten.etherscan.io/, we get two transactions.
+(The third on was done after I had solved the challenge, but the picture was taken afterwards)
+
+![](misc/transactions.png)
+
+On viewing the data of the two transactions, we see a hex code, divided into three parts:
+
+![](misc/t_hex1.png)
+![](misc/t_hex2.png)
+
+The message: ``` Hmm-6461726B4354467B337468337233756D5F353730723467335F3772346e3534633731306e7d0 ```
+
+Converting that hex to text, we get the flag.
+
+The flag is:
+```
+darkCTF{3th3r3um_570r4g3_7r4n54c710n}
+```
+
