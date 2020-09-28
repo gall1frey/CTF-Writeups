@@ -18,6 +18,8 @@ Author: [Gallifrey](https://github.com/gall1frey)
     - [Powershell](#Powershell)
     - [Suspicious](#Suspicious)
 - [Web](#web)
+    - [Source](#Source)
+    - [Simple_SQL](#SimpleSQL)
 
 # OSINT<a name="osint"></a>
 ## Find cell<a name="findCell"></a>
@@ -55,6 +57,7 @@ The flag is:
 ```
 darkCTF{15-09-2019}
 ```
+
 
 # Cryptography<a name="crypto"></a>
 
@@ -163,6 +166,7 @@ The flag is:
 DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}
 ```
 
+
 # Misc<a name="misc"></a>
 
 ## Minesweeper<a name="Minesweeper"></a>
@@ -226,6 +230,7 @@ The flag is:
 ```
 darkCTF{3th3r3um_570r4g3_7r4n54c710n}
 ```
+
 
 # Forensics<a name="forensics"></a>
 
@@ -394,6 +399,7 @@ The flag is:
 darkCTF{H3r3_1s_5u5p1c10us}
 ```
 
+
 # Web<a name="web"></a>
 
 ## Source<a name="Source"></a>
@@ -486,3 +492,37 @@ The flag is:
 darkCTF{it_is_very_easy_to_find}
 ```
 
+
+# Linux<a name="linux"></a>
+
+## linux starter<a name="LinuxStarter"></a>
+```
+Don't Try to break this jail
+
+ssh wolfie@linuxstarter.darkarmy.xyz -p 8001 password : wolfie
+```
+
+### Solution
+
+Connecting to the remote machine, we see that we have no cd, cat or ls permissions in the current directory. 
+There is, however, a work-around to that: ```echo```.
+
+First, we run ```echo *``` to view all files in the current directory.
+That gets us two directories, ```bin``` and ```imp```
+Then we use ```echo ./imp/*``` to view files in the ```imp``` directory.
+That gives us 
+```shell
+wolfie@9ad161dbc9ce:~$ echo ./imp/*
+./imp/flag.txt
+```
+
+To read the contents of flag.txt, we use the command ```readarray```
+
+![](linux/starter.png)
+
+We get the flag this way, but I don't think that's the intended way, since the ```bin``` directory contained a ```cat``` executable, and the actual solution probably revolved around using that to get the flag.
+
+The flag is:
+```
+darkCTF{h0pe_y0u_used_intended_w4y}
+```
