@@ -188,7 +188,7 @@ Ropsten network contains my dark secret. Help us find it. Name of the contract w
 The address is of a contract in the ropsten network of the etherium blockchain. On searching for the address on https://ropsten.etherscan.io/, we get two transactions.
 (The third on was done after I had solved the challenge, but the picture was taken afterwards)
 
-![](transactions.png)
+![](misc/transactions.png)
 
 On viewing the data of the two transactions, we see a hex code, divided into three parts:
 
