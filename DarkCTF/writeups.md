@@ -1,6 +1,12 @@
-# OSINT
+# DarkCTF Writeups
 Author: [Gallifrey](https://github.com/gall1frey)
 
+    * [Osint](#osint)
+    * [Cryptography](#crypto)
+    * [Misc](#misc)
+    * [Forensics](#forensics)
+
+# OSINT<a name="osint"></a>
 ## Find cell
 ```
 I lost my phone while I was travelling back to home, I was able to get back my eNB ID, MCC and MNC could you help me catch the tower it was last found.
@@ -38,7 +44,7 @@ The flag is:
 darkCTF{15-09-2019}
 ```
 
-# Cryptography
+# Cryptography<a name="crypto"></a>
 
 ## Pipe Rhyme
 ```
@@ -145,7 +151,7 @@ The flag is:
 DarkCTF{0k@y_7h15_71m3_Y0u_N33d_70_Br3@k_M3}
 ```
 
-# Misc
+# Misc<a name="misc"></a>
 
 ## Minesweeper
 ```
@@ -209,7 +215,7 @@ The flag is:
 darkCTF{3th3r3um_570r4g3_7r4n54c710n}
 ```
 
-# Forensics
+# Forensics<a name="forensics"></a>
 
 ## Wolfie's Contacts
 ```
