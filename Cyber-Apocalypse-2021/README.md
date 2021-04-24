@@ -560,10 +560,10 @@ CHTB{cl4551c_ch4ll3ng3_r3wr1tt3n_1n_ru5t}
 The chall came with an executable, ```authenticator```
 ### Solution
 Running the executable, we find it asks us for an Alien ID. We don't know that.
-![run1](assets/rev/authenticator_run_1.png)
+![run1](assets/rev/authenticator_run1.png)
 Disassembling the file using IDA, we get the ID, that's 11337. 
 ![IDA1](assets/rev/authenticator_ID.png)
-![run2](assets/rev/authenticator_run_2.png)
+![run2](assets/rev/authenticator_run2.png)
 Entering that, we are asked for a pin. We don't know that either. Looking through the disassembled file in IDA, we come across a ```checkpin``` function.
 ![IDA2](assets/rev/authenticator_pin_no_xor.png)
 There is a string in the checkpin function which could be the flag, except it looks like gibberish. 
