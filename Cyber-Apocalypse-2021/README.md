@@ -561,11 +561,15 @@ The chall came with an executable, ```authenticator```
 ### Solution
 Running the executable, we find it asks us for an Alien ID. We don't know that.
 ![run1](assets/rev/authenticator_run1.png)
+
 Disassembling the file using IDA, we get the ID, that's 11337. 
 ![IDA1](assets/rev/authenticator_ID.png)
+
 ![run2](assets/rev/authenticator_run2.png)
+
 Entering that, we are asked for a pin. We don't know that either. Looking through the disassembled file in IDA, we come across a ```checkpin``` function.
 ![IDA2](assets/rev/authenticator_pin_no_xor.png)
+
 There is a string in the checkpin function which could be the flag, except it looks like gibberish. 
 ```}a:Vh|}a:g}8j=}89gV<p<}:dV8<Vg9}V<9V<:j|{:```
 Looking further, we see that before comparing the input pin, this string is XORed with 9. So most probably, this is an encrypted flag, and the key is 9.
@@ -580,12 +584,15 @@ The chall came with an executable, ```passphrase```
 ### Solution
 Running the executable, it asks us for a passphrase. And in case of a wrong passphrase, it exits out.
 ![run](assets/rev/passphrase_run.png)
+
 Disassembling the file using gdb:
 First, we disassemble main. 
 ![disasMain](assets/rev/passphrase_disas_main.png)
+
 We find some instructions moving data to the stack.
 Let's check out the stack using ```x/200c $sp```
 ![stack](assets/rev/passphrase_stack.png)
+
 This gives us the flag
 The flag is:
 ```
@@ -648,6 +655,7 @@ We have partial data, but not the flag. Checking all other common baudrates does
 So now we analyze the signal to figure out what the baudrate could be.
 Zooming in at the point where the garbage values start:
 ![Analysis](assets/hw/serial_logs_baud.png)
+
 The time taken to send one byte is 13.46us. 
 Computing baudrate from this: ```1000,000/13.44 = 74183```
 Using 74183 as the baudrate, we get the rest of the data, and the flag!
@@ -674,6 +682,7 @@ We're provided with a .sal file, ```secure.sal```
 This time, there are four channels. 
 Four channels could mean it's SPI communication, cause it uses CLK, EN, MISO, MOSI.
 ![Analysis](assets/hw/secure_spi.png)
+
 Channel 3 looks closest to CLK, and channel 2 to EN.
 Using the SIP analyzer using these settings did yield some data, but not much. I was stuck at this point, but somw quick googling took me to https://6e726d.github.io/Challenge/Ekoparty15 . There it talks about using an SPI flash analyzer. So, using [kasjer's SPI flash analyzer](https://github.com/kasjer/saleae_spiflash), with the following configuration
 ```
