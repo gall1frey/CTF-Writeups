@@ -560,8 +560,12 @@ CHTB{cl4551c_ch4ll3ng3_r3wr1tt3n_1n_ru5t}
 The chall came with an executable, ```authenticator```
 ### Solution
 Running the executable, we find it asks us for an Alien ID. We don't know that.
+![run1](assets/rev/authenticator_run_1.png)
 Disassembling the file using IDA, we get the ID, that's 11337. 
+![IDA1](assets/rev/authenticator_ID.png)
+![run2](assets/rev/authenticator_run_2.png)
 Entering that, we are asked for a pin. We don't know that either. Looking through the disassembled file in IDA, we come across a ```checkpin``` function.
+![IDA2](assets/rev/authenticator_pin_no_xor.png)
 There is a string in the checkpin function which could be the flag, except it looks like gibberish. 
 ```}a:Vh|}a:g}8j=}89gV<p<}:dV8<Vg9}V<9V<:j|{:```
 Looking further, we see that before comparing the input pin, this string is XORed with 9. So most probably, this is an encrypted flag, and the key is 9.
@@ -575,10 +579,13 @@ CHTB{th3_auth3nt1c4t10n_5y5t3m_15_n0t_50_53cur3}
 The chall came with an executable, ```passphrase```
 ### Solution
 Running the executable, it asks us for a passphrase. And in case of a wrong passphrase, it exits out.
+![run](assets/rev/passphrase_run.png)
 Disassembling the file using gdb:
 First, we disassemble main. 
+![disasMain](assets/rev/passphrase_disas_main.png)
 We find some instructions moving data to the stack.
 Let's check out the stack using ```x/200c $sp```
+![stack](assets/rev/passphrase_stack.png)
 This gives us the flag
 The flag is:
 ```
@@ -618,6 +625,89 @@ Decoding from base64 the name of the exe file, we get the flag.
 The flag is:
 ```
 CHTB{pH1sHiNg_w0_m4cr0s???}
+```
+
+# Hardware<a name="hardware"></a>
+## Serial Logs<a name="serialLogs"></a>
+We're provided with a .sal file, ```serial_logs.sal```
+### Solution
+Opening the sal file, we see two channels. Guessing by the name of the challenge, I tried using an Async Serial analyzer on channel 1. 
+Going through the most common baudrates, we get a hit on 115200.
+Here's some of the output received.
+```
+[LOG] Connection from ea7372f07f7a18fcfe163ff48338076ec0de0cc4a435f0abbc6046db67a73dec
+[LOG] Connection from 6edec472e9754574d91f460e170b825bacee5f121b73805dffa4f2a5a7d23d7f
+[LOG] Connection from 316636cf0500c22f97fa261585b72a48c4625aca7868f0f6ee253937620ac15c
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[LOG] Connection from 4b1186d29d6b97f290844407273044e5202ddf8922163077b4a82615fdb22376
+[ERR] Noise detected in channel. Swithcing baud to backup value
+\xEE\x1E\xEC~\x9E\x10\xF2\x1E|`~\x1C\xEE|\x9E\x1C\x0E\x1C\x1Eb\x9C\x8C\x9C\x8Er\x1E|\x8E\x0C\x9E|p\xE0|\x0E\x10\x1E\x1C\xE2p\x9C\x9CC\x1C\x1C\xE2pp|\x8E\x90|\x8E\x80p\x8E\x8C|\x8E\x8Epp\x8E\x90|\xE2\x1C\x10\x1E\x9C\x1C\x1C||\x8C|\x1C\x82|\x0E\x8Epp\x8E\x9E|p\x90|\9Cpp\x92p\x1C\x10\x1Ep\x8C|\x1C\x8Ep\x8E\x9Cp\x02\xEE\x1E\xEC~\x9E~\x1C\xEE|\x9E\x1C\x0E\x1C\x1Eb\x9C\x8E|\x1E|\x1C\x8C\x9C\x8Er\x1E2p|\x8Ep\x1C\x8C|\xE2\x90|p\x9E|p\x0E\x1C\x0E\x0C\x9E|\x8E\x0C\x9Ex1C\x0C\x9Epp\x9C\x8Epr\x80p\x1C\xE0|p\x82|p\x90|\x8E\x82||p\xE2\x\x1E\x9C\x10\x9E\x1C\x82|\x1C\x0C\x1E|r\x0C\x9E|\xE2\x12\x9C|r\x129E|\x02\xEE\x1E\xEC~\x9E\x10\xF2\x1E|`~\x1C\xEE|\x9E\x1C\x0E\x1C\x
+```
+We have partial data, but not the flag. Checking all other common baudrates doesn't give us any results either.
+So now we analyze the signal to figure out what the baudrate could be.
+Zooming in at the point where the garbage values start:
+![Analysis](assets/hw/serial_logs_baud.png)
+The time taken to send one byte is 13.46us. 
+Computing baudrate from this: ```1000,000/13.44 = 74183```
+Using 74183 as the baudrate, we get the rest of the data, and the flag!
+The flag is:
+```
+CHTB{wh47?!_f23qu3ncy_h0pp1n9_1n_4_532141_p2070c01?!!!52}
+```
+
+## Compromised<a name="compromised"></a>
+We're provided with a .sal file, ```compromised.sal```
+### Solution
+Opening the sal file, we see two channels. But this time, they're not blank. Two channels could mean one's SDA and one's SCL and it's using I2C. 
+Using the I2C Analyzer and exporting the data to a csv file, we can see that there is some communication. 
+We're interested in any data sent by ```0x2C```.
+Extracting that from the csv file gets us the flag.
+The flag is:
+```
+CHTB{nu11_732m1n47025_c4n_8234k_4_532141_5y573m!@52)#@%}
+```
+
+## Secure<a name="secure"></a>
+We're provided with a .sal file, ```secure.sal```
+### Solution
+This time, there are four channels. 
+Four channels could mean it's SPI communication, cause it uses CLK, EN, MISO, MOSI.
+![Analysis](assets/hw/secure_spi.png)
+Channel 3 looks closest to CLK, and channel 2 to EN.
+Using the SIP analyzer using these settings did yield some data, but not much. I was stuck at this point, but somw quick googling took me to https://6e726d.github.io/Challenge/Ekoparty15 . There it talks about using an SPI flash analyzer. So, using [kasjer's SPI flash analyzer](https://github.com/kasjer/saleae_spiflash), with the following configuration
+```
+CS   -> Channel 2
+CLK  -> Channel 3
+MOSI -> Channel 0
+MISO -> Channel 1
+```
+we get the flag along with a bunch of garbage data.
+The flag is:
+```
+CHTB{5P1_15_c0mm0n_0n_m3m02y_d3v1c35_!@52}
+```
+
+## Off The Grid<a name="offTheGrid"></a>
+We're provided with a .sal file, ```off_the_grid.sal```, and a schematic, ```schematic.png```.
+### Solution
+Opening the .sal file with Saleae's Logic2, we find there are six channels. Channels 
+First off, there are six channels, but channels 4 and 5 don't seem to be transmitting any data. So we're down to four channels.
+Using the SPI analyzer using the connections shown in the schematic, we get a whole lot of hexadecimal data.
+
+At this point, I was stuck. I didn't solve this chall till after the CTF. 
+Googling OLED high level analyzers for Logic2 took me into a deep rabbithole.
+It was later I that I figured I already had the data for all the pixels on the OLED display, I only had to convert them to an image.
+Googling stuff about the display in question gave me some information:
+```
+There is an initialization sequence in the beginning. That'll need to be skipped.
+Page init is represented by the bytes 0xB0 0x02 0x10
+The screen is 128 pizels wide
+```
+Using this info, we can write a python script to convert the series of hex values to images.
+The flag is:
+```
+
 ```
 
 # Misc<a name="misc"></a>
