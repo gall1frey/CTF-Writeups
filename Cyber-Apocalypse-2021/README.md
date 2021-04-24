@@ -554,3 +554,33 @@ The flag is:
 ```
 CHTB{cl4551c_ch4ll3ng3_r3wr1tt3n_1n_ru5t}
 ```
+
+# Reversing<a name="rev"></a>
+## Authenticator<a name="authenticator"></a>
+The chall came with an executable, ```authenticator```
+### Solution
+Running the executable, we find it asks us for an Alien ID. We don't know that.
+Disassembling the file using IDA, we get the ID, that's 11337. 
+Entering that, we are asked for a pin. We don't know that either. Looking through the disassembled file in IDA, we come across a ```checkpin``` function.
+There is a string in the checkpin function which could be the flag, except it looks like gibberish. 
+```}a:Vh|}a:g}8j=}89gV<p<}:dV8<Vg9}V<9V<:j|{:```
+Looking further, we see that before comparing the input pin, this string is XORed with 9. So most probably, this is an encrypted flag, and the key is 9.
+XORing each character of that string with 9, we get the flag: ```th3_auth3nt1c4t10n_5y5t3m_15_n0t_50_53cur3```
+The flag is:
+```
+CHTB{th3_auth3nt1c4t10n_5y5t3m_15_n0t_50_53cur3}
+```
+
+## Passphrase<a name="passphrase"></a>
+The chall came with an executable, ```passphrase```
+### Solution
+Running the executable, it asks us for a passphrase. And in case of a wrong passphrase, it exits out.
+Disassembling the file using gdb:
+First, we disassemble main. 
+We find some instructions moving data to the stack.
+Let's check out the stack using ```x/200c $sp```
+This gives us the flag
+The flag is:
+```
+CHTB{3xtr4t3rR3stR14L5_VS_hum4n5}
+```
