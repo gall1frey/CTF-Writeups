@@ -619,3 +619,58 @@ The flag is:
 ```
 CHTB{pH1sHiNg_w0_m4cr0s???}
 ```
+
+# Misc<a name="misc"></a>
+## Alien Camp<a name="alienCamp"></a>
+A docker container was provided.
+### Solution
+On connecting to the docker container using netcat, there was a menu with two options: 1 for help and 2 to begin the challenge. 
+On selecting 1, we get a bunch of emojis and what number they represent. Then, on beginning the challenge, we're asked to perform calculations on those emojis fast.
+Writing a python script to automate this challenge:
+```python
+from pwn import remote
+d = dict()
+
+r = remote('188.166.145.178',31364)
+res = r.recvuntil('> ')
+#print(res)
+r.send('1\n')
+res = r.recvuntil('test!\n> ')
+#print(res)
+arr = res.decode().strip().split()
+for i in range(len(arr)-1):
+        if arr[i+1] == '->' :
+                d[arr[i]] = arr[i+2]
+print(d)
+r.send('2\n')
+for i in range(500):
+        #mat_str = str(i+1)+':\n'
+        print(r.recvuntil('Question').decode(), end='')
+        print(r.recvuntil(':').decode(), end='')
+        res = r.recvuntil('=').decode()
+        print(res, end='')
+        print(r.recvuntil('Answer: ').decode(), end='')
+        msg = ''
+        for j in res.split()[:-1]:
+                if j in d.keys():
+                        msg += d[j]
+                else:
+                        msg += j
+        print(eval(msg))
+        r.send(str(eval(msg))+'\n')
+r.interactive()
+```
+The flag is:
+```
+CHTB{3v3n_4l13n5_u53_3m0j15_t0_c0mmun1c4t3}
+```
+
+## Input As a Service<a name="inputAsAService"></a>
+A docker container was provided.
+### Solution
+On connecting to the docker container using netcat, we see there's an input prompt. Playing around with it, we find out that it's interpreting any input given to it as python commands and executing it. 
+One way of going about it would be to send in the command ```print(open('flag.txt','r').read())```
+The flag is:
+```
+CHTB{4li3n5_us3_pyth0n2.X?!}
+```
