@@ -1,4 +1,4 @@
-# DarkCTF Writeups
+# Cyber Apocalypse CTF 2021 Writeups
 Author: [Gallifrey](https://github.com/gall1frey)
 
 ### Contents
