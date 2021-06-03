@@ -11,6 +11,10 @@ Author: [Gallifrey](https://github.com/gall1frey)
 7. 9th MAY: [Introductrory ICICLE](#introductory-icicle)
 8. 13th MAY: [Two Loves](#two-loves)
 9. 14th MAY: [Broken Bear](#broken-bear)
+10. 15th MAY: [Neat RSA 2](#neat-rsa-2)
+11. 16th MAY: [An ICICLE to remember](#an-icicle-to-remember)
+12. 17th MAY: [Boxed In](#boxed-in)
+13. 18th MAY: [Guess the Password](#guess-the-password)
 
 ## &aaa<a name="aaa"></a>
 ```
@@ -836,23 +840,6 @@ regex_3_args = r'([\w]+) ([\[\]\w]+), ([\w]+), ([\[\]\w]+)'
 regexFLAG = r'([\w]+):$'
 regex_1_args = r'([\w]+) ([\w]+)'
 
-#Testing stuff out.
-'''
-for i in range(1,3955):
-    match_3_args = re.findall(regex_3_args, instructions[i])
-    match_2_args = re.findall(regex_2_args, instructions[i])
-    match_1_args = re.findall(regex_1_args, instructions[i])
-    if len(match_3_args) == 1:
-        handle_3_args(match_3_args[0])
-    elif len(match_2_args) == 1:
-        handle_2_args(match_2_args[0])
-    elif len(match_1_args) == 1:
-        handle_1_args(match_1_args[0])
-    if i == 3955:
-        break
-
-rip = 3955
-'''
 #Execute.
 if 'j' in inst or 'jnz' in inst or 'jl' in inst or 'jz' in inst:
     while end_flag == False:
@@ -886,4 +873,66 @@ print()
 The flag is:
 ```
 ictf{0nly_@n_ICICLE_!s_l0vli3r_th@n_@_tr33}
+```
+
+
+## Two Loves<a name="two-loves"></a>
+```
+Description
+Box outside the think.
+
+Attachments
+https://imaginary.ml/r/BE85-boxed_in.c, nc oreos.imaginary.ml 30000
+
+Author
+Robin_Jadoul
+
+Points
+100
+```
+### Solution
+This was an interesting challenge, I loved it. You are provided with the source code of the executable running on the server. Executing it, we see it is a game of tic tac toe.
+
+The thing about tic tac toe is that it is impossible to win unless your opponent makes a mistake. So, beating the code normally isn't possible.
+
+So we look through the source code, mainly these parts of it.
+```C
+//The part which reads in an int
+int readint() {
+    ...
+        char* line = NULL;
+        getline(&line, &len, stdin);
+    ...
+        int res = atoi(line);
+    ...
+}
+```
+Here, we see that the integer from the string line is directly stored in the integer res. So, though the function performs checks for - in the input (so we don't enter negative numbers), we can cause integer overflow to store negative numbers in res.
+Secondly, we look at:
+```C
+//The parts that check if a winning line has been made
+int is_(int x, int y, int player) {
+    if (x < 0 || x >= 3 || y < 0 || y >= 3) return 0;
+    return field.grid[x][y] == player;
+}
+
+int is_winning_line(int x, int y, int dx, int dy, int player) {
+    return (is_(x + dx, y+dy, player) + is_(x + 2*dx, y + 2*dy, player) + is_(x - dx, y - dy, player) + is_(x - 2*dx, y - 2*dy, player)) >= 2;
+}
+```
+Here we see that the ```is_``` function checks whether
+  1. The indices are in range 0-2
+  2. The box in the grid corresponding to the indices are occupied by the player.
+
+And the function ```_is_winning_line``` checks if the boxes **around it** form a winning line.
+
+We use this knowledge to beat the program by marking a box out of bounds, kinda like this picture: [](https://previews.123rf.com/images/manonteravest/manonteravest1808/manonteravest180800012/108865743-think-outside-the-box-tic-tac-toe-game-text.jpg)
+
+First, we mark a box at (1,2), then at (0,2) and finally at (-1,2). The -1 can be achieved by giving ```4294967295``` as the input. 4294967295 is a four bit number with all its bits 1. That effectively makes it -1 when it is casted to a 4 bit integet (default int in C). That gets us the flag.
+
+One thing to note is that the (-1,2) box MUST BE FILLED AT THE END.
+
+The flag is:
+```
+ictf{y0u_mu$t_r3al1ze_there_i$_n0_box}
 ```
