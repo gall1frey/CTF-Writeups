@@ -876,7 +876,7 @@ ictf{0nly_@n_ICICLE_!s_l0vli3r_th@n_@_tr33}
 ```
 
 
-## Two Loves<a name="two-loves"></a>
+## Boxed In<a name="boxed-in"></a>
 ```
 Description
 Box outside the think.
