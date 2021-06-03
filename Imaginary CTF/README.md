@@ -526,7 +526,7 @@ Viewing the hexdump of the image file, we see:
 0000010 0000 6009 0000 4006 0208 0000 7200 eecb
 ```
 The ```1010 1010 1010 1010``` part looks wrong. Replacing it with the actual magic bytes of a png file (See wikipedia, list of magic bytes), ```5089 474e 0a0d 0a1a```, we fix the image. The flag is visible on the top left corner of the image.
-[](./fixed.png)
+![](./fixed.png)
 
 The flag is:
 ```
@@ -926,7 +926,7 @@ Here we see that the ```is_``` function checks whether
 
 And the function ```_is_winning_line``` checks if the boxes **around it** form a winning line.
 
-We use this knowledge to beat the program by marking a box out of bounds, kinda like this picture: [](https://previews.123rf.com/images/manonteravest/manonteravest1808/manonteravest180800012/108865743-think-outside-the-box-tic-tac-toe-game-text.jpg)
+We use this knowledge to beat the program by marking a box out of bounds, kinda like this picture: ![](https://previews.123rf.com/images/manonteravest/manonteravest1808/manonteravest180800012/108865743-think-outside-the-box-tic-tac-toe-game-text.jpg)
 
 First, we mark a box at (1,2), then at (0,2) and finally at (-1,2). The -1 can be achieved by giving ```4294967295``` as the input. 4294967295 is a four bit number with all its bits 1. That effectively makes it -1 when it is casted to a 4 bit integet (default int in C). That gets us the flag.
 
