@@ -14,7 +14,8 @@ Author: [Gallifrey](https://github.com/gall1frey)
 10. 15th MAY: [Neat RSA 2](#neat-rsa-2)
 11. 16th MAY: [An ICICLE to remember](#an-icicle-to-remember)
 12. 17th MAY: [Boxed In](#boxed-in)
-13. 18th MAY: [Guess the Password](#guess-the-password)
+13. 19th MAY: [Guess the Password](#guess-the-password)
+14. 20th MAY: [Ask Hell](#ask-hell)
 
 ## &aaa<a name="aaa"></a>
 ```
@@ -935,4 +936,203 @@ One thing to note is that the (-1,2) box MUST BE FILLED AT THE END.
 The flag is:
 ```
 ictf{y0u_mu$t_r3al1ze_there_i$_n0_box}
+```
+
+
+## Guess the Password<a name="guess-the-password"></a>
+```
+Description
+Who doesn't love a guessing challenge? Maybe you can channel your attention inside the code to figure it out.
+
+Attachments
+nc oreos.imaginary.ml 3000, https://imaginary.ml/r/E0FF-password.py
+
+Author
+puzzler7
+
+Points
+75
+```
+### Solution
+Looking at the source code, mainly the ```guess_password``` function, we find
+```python
+if user_guess != password[i]:
+    # punish the users for supplying wrong char..
+    time.sleep(0.3 * (int(password[i], 16)+1))
+    correct_password = False
+```
+Basically, for every wrongly guessed character, we get a delay of 0.3 times one more than the decimal value of that hex character. If we know the delay, calculating the character should be an easy task.
+
+Writing a script to do that:
+```python
+from pwn import *
+import time
+
+#start connection with remote host
+r = remote('oreos.imaginary.ml',3000)
+print(r.recv().decode())
+
+passwd = ''
+
+#select option 2, guess password
+r.send(b'2\n')
+
+#Get prompt
+print(r.recvuntil('?\n').decode().strip())
+
+#Guess password
+for _ in range(8):
+    r.send(b'-\n')
+    start = time.time()
+    print('-')
+    print(r.recvuntil('?\n').decode().strip())
+    t = time.time() - start
+    #reverse the delay formula from the problem
+    letter = hex(int(t/0.3)-1)
+    passwd += letter[2:]
+
+#Give the correct password
+for i in range(8):
+    txt = passwd[i] + '\n'
+    r.send(txt.encode())
+    start = time.time()
+    print(r.recv().decode())
+    t = time.time() - start
+    letter = hex(int(t/0.3)-1)
+    passwd += letter[2:]
+```
+
+The flag is:
+```
+ictf{t!m!ng_!5_3v3ry+h!ng}
+```
+
+
+## Ask Hell<a name="ask-hell"></a>
+```
+Description
+My friend speaks the language of gods, but when I told him I didn't like it he stole my flag! Please help me retrieve it ><
+
+Attachments
+https://imaginary.ml/r/131E-main.hs
+
+Author
+A~Z
+
+Points
+135
+```
+### Solution
+We are provided with an obfuscated Haskell code.
+```
+import Data.Bits (xor)
+encrypt = ((<~)<$>). ((.) (@++) $mess .unzip .t .(fromEnum<$>))
+(.:) = (.)(.)(.)
+t = let t // [] = t; t // (x:xs) = ((x,head $xs):t) // tail xs in (//)[]
+mess a = ((((.) head $((.)(($3)<$>) $((<$>) $flip (.)(*2)) .((<$>)(-))) .(:[]))<$>) .(.:) fst id id $a, (!) .snd $a)
+     where (!) (x:xs) = (:)x $(@++) .unzip $t xs
+(@++)(a,b) = (++) a $map (xor 104) $uncurry xor <$> zip a b
+(<~) = (.) id ($) (toEnum::Int->Char) .foldl1(*) .(:[])
+-- main = (putStrLn.show) $encrypt "ictf{REDACTED}" == "f-Yefl*Y+E:Y.Y-.uncs#E~fa/npA?e/H;rKlg"
+
+main = (putStrLn.show) (encrypt "ictf{REDACTED}")
+```
+I had no idea about haskell when I set out solving this challenge. But watching a couple of videos told me:
+  1. The ```<$>``` symbol stood for ```fmap```. i.e. apply a function to all elements in an iterable.
+  2. The ```$``` operator meant anything on the right of it took precedence over anything on the left.
+  3. The ```.``` operator chained functions kinda like in javascript, but the order of execution is right to left.
+With a lot of trial and error, I tried deobfuscating the code by substituting the ```$``` and ```<$>``` operators with parentheses and fmap respectively.
+
+Then I set about figuring out what each function did, and wrote a pseudocode in python that basically did the same thing as the Haskell code, except without the obfuscation. Once that was done, I could just write functions that reversed the encryption.
+
+The final script looks like this:
+```python
+def t(l):
+    res = []
+    for i in range(len(l)-1,-1,-2):
+        res.append((l[i-1],l[i]))
+    return res
+
+def unzip(res):
+    res2 = [tuple(x[0] for x in res),tuple(x[1] for x in res)]
+    return res2
+
+def exclamation(l):
+    res = list(l[0])
+    res.append(l[1][0])
+    for i in unzip(t(l[1][1:])):
+        res.extend(i)
+    res = [tuple(res[:len(res)//2]),tuple(res[len(res)//2:])]
+    return res
+
+def a(z):
+    #zip
+    res = list(zip(z[0],z[1]))
+    #uncurry
+    res = list(i[0]^i[1] for i in res)
+    #map xor 104
+    res2 = list(i ^ 104 for i in res)
+    res = list(z[0])
+    res.extend(res2)
+    return res
+
+def encrypt(pt):
+    # fromEnum
+    res1 = list(ord(i) for i in pt)
+    #unzip t
+    res2 = unzip(t(res1))
+    #mess
+    res3 = [tuple((x-6) for x in res2[0]),tuple(res2[1])]
+    tmp = a(unzip(t(res3[1][1:])))
+    tmp.insert(0,res3[1][0])
+    res4 = [tuple(res3[0]),tuple(tmp)]
+    #fmap @
+    res5 = a(res4)
+    print(res5)
+    for i in res5:
+        print(chr(i),end = '')
+    print()
+
+def inv_a(res):
+    res1h = res[:len(res)//2]
+    res2h = res[len(res)//2:]
+    for i in range(len(res2h)):
+        res2h[i] = res2h[i]^104
+    rzip = list(zip(res1h,res2h))
+    res2h = list(map(lambda x: x[0]^x[1],rzip))
+    res = [res1h]
+    res.append(res2h)
+    return res
+
+def undo_t(l):
+    res = []
+    for i in l[::-1]:
+        res.append(i[0])
+        res.append(i[1])
+    return res
+
+def undo_unzip(l):
+    res = list(zip(l[0],l[1]))
+    return res
+
+def decrypt(pt):
+    #convert to int list
+    res = list(ord(i) for i in pt)
+    res = inv_a(res)
+    res1h, res2h = res
+    mid = res2h[0]
+    res2h = undo_t(undo_unzip(inv_a(res2h[1:])))
+    res2h.insert(0,mid)
+    res1h = [i+6 for i in res1h]
+    res = undo_t(undo_unzip([res1h,res2h]))
+    for i in res:
+        print(chr(i),end = '')
+    print()
+
+decrypt("f-Yefl*Y+E:Y.Y-.uncs#E~fa/npA?e/H;rKlg")
+```
+
+The flag is:
+```
+ictf{H4t3r_s4y_h@sKe11_m0ar_l1k3_h3ll}
 ```
